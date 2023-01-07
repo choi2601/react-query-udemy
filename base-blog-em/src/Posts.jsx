@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 import { PostDetail } from "./PostDetail";
 const maxPostPage = 10;
@@ -15,6 +15,24 @@ async function fetchPosts(pageNum) {
 export function Posts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedPost, setSelectedPost] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (currentPage < maxPostPage) {
+      const nextPage = currentPage + 1;
+      // prefetch: 자동적으로 캐시에 데이터를 추가
+      // 캐시 시간이 만료되지 않는 이상 해당 캐시에서 데이터를 바로 참조
+      queryClient.prefetchQuery(
+        ["posts", nextPage],
+        () => fetchPosts(nextPage),
+        {
+          staleTime: 2000,
+          keepPreviousData: true,
+        }
+      );
+    }
+  }, [currentPage, queryClient]);
 
   // isFetching: 비동기 쿼리가 해결(resolved)되지 않았음을 의미
   // isLoading: isFetching의 하위 집합. 캐싱된 데이터도 없고 쿼리를 만든 적도 없는 경우를 의미
