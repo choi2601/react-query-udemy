@@ -1,7 +1,9 @@
 // @ts-nocheck
+// eslint-disable-next-line simple-import-sort/imports
 import dayjs from 'dayjs';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { useQuery } from 'react-query';
+import { Dispatch, SetStateAction, useState, useEffect } from 'react';
+
+import { useQuery, useQueryClient } from 'react-query';
 
 import { axiosInstance } from '../../../axiosInstance';
 import { queryKeys } from '../../../react-query/constants';
@@ -76,6 +78,16 @@ export function useAppointments(): UseAppointments {
     [queryKeys.appointments, monthYear.year, monthYear.month],
     () => getAppointments(monthYear.year, monthYear.month),
   );
+
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    const nextMonthYear = getNewMonthYear(monthYear, 1);
+
+    queryClient.prefetchQuery(
+      [queryKeys.appointments, nextMonthYear.year, monthYear.month],
+      () => getAppointments(nextMonthYear.year, monthYear.month),
+    );
+  }, [queryClient, monthYear]);
 
   /** ****************** END 3: useQuery  ******************************* */
 
