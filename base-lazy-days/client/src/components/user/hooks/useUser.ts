@@ -44,13 +44,16 @@ export function useUser(): UseUser {
   // meant to be called from useAuth
   function updateUser(newUser: User): void {
     // TODO: update the user in the query cache
+    // invoke onSucess
     queryClient.setQueryData(queryKeys.user, newUser);
   }
 
   // meant to be called from useAuth
   function clearUser() {
     // TODO: reset user to null in query cache
+    // do not invoke onSuccess
     queryClient.setQueryData(queryKeys.user, null);
+    queryClient.removeQueries('user-appointments');
   }
 
   return { user, updateUser, clearUser };
