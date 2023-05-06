@@ -51,9 +51,8 @@ export function useUser(): UseUser {
   // meant to be called from useAuth
   function clearUser() {
     // TODO: reset user to null in query cache
-    // do not invoke onSuccess
     queryClient.setQueryData(queryKeys.user, null);
-    queryClient.removeQueries('user-appointments');
+    queryClient.removeQueries([queryKeys.appointments, queryKeys.user]);
   }
 
   return { user, updateUser, clearUser };
