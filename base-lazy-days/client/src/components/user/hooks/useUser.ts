@@ -52,12 +52,14 @@ export function useUser(): UseUser {
   // meant to be called from useAuth
   function updateUser(newUser: User): void {
     // TODO: update the user in the query cache
+    setStoredUser(newUser);
     queryClient.setQueryData(queryKeys.user, newUser);
   }
 
   // meant to be called from useAuth
   function clearUser() {
     // TODO: reset user to null in query cache
+    clearStoredUser();
     queryClient.setQueryData(queryKeys.user, null);
     queryClient.removeQueries([queryKeys.appointments, queryKeys.user]);
   }
