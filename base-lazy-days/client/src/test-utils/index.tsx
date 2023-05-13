@@ -29,3 +29,11 @@ export function renderWithQueryClient(
     <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
   );
 }
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const createQueryClientWrapper = () => {
+  const queryClient = generateTestQueryClient();
+  return ({ children }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@testing-library/react-hooks": "^8.0.1",
     "msw": "^1.2.1"
   }
 }
